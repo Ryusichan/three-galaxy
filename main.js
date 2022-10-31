@@ -24,6 +24,7 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 camera.position.setZ(30);
+camera.rotation.x = 0.5;
 
 // render == draw
 renderer.render(scene, camera);
@@ -34,15 +35,53 @@ const geometry = new THREE.TorusGeometry(6, 0.05, 16, 100);
 // 5. Material - the wrapping paper for an object, determines how the object looks
 const material = new THREE.MeshStandardMaterial({ color: 0xffacff });
 
-// 6. Mesh - geometry + material
+// 6. Mesh - geometry + material 고리 추가
 const torus = new THREE.Mesh(geometry, material);
-const circle = new THREE.Mesh(
-  new THREE.TorusGeometry(5.8, 0.05, 14, 100),
-  new THREE.MeshStandardMaterial({ color: 0x9292d8 })
-);
 
-scene.add(torus);
-scene.add(circle);
+const circleArray = [
+  { size: 10, color: 0xf0eee9 },
+  { size: 10.1, color: 0xded4b7 },
+  { size: 10.2, color: 0xded4b7 },
+  { size: 10.3, color: 0xded4b7 },
+  { size: 10.4, color: 0xded4b7 },
+  { size: 10.5, color: 0xded4b7 },
+  { size: 10.6, color: 0xded4b7 },
+  { size: 10.7, color: 0xded4b7 },
+  { size: 10.8, color: 0xded4b7 },
+  { size: 10.9, color: 0xded4b7 },
+  { size: 11.0, color: 0xded4b7 },
+  { size: 11.5, color: 0xa58d77 },
+  { size: 11.6, color: 0xa58d77 },
+  { size: 11.7, color: 0xa58d77 },
+  { size: 11.8, color: 0xa58d77 },
+  { size: 11.9, color: 0xa58d77 },
+  { size: 12.0, color: 0xa58d77 },
+  { size: 12.1, color: 0xa58d77 },
+  { size: 12.2, color: 0xa58d77 },
+  { size: 12.3, color: 0xa58d77 },
+  { size: 12.4, color: 0xa58d77 },
+];
+
+function addCircle() {
+  for (let i = 0; i < circleArray.length; i++) {
+    const circleGeometry = new THREE.TorusGeometry(
+      circleArray[i].size,
+      0.05,
+      14,
+      100
+    );
+    const circleMaterial = new THREE.MeshStandardMaterial({
+      color: circleArray[i].color,
+    });
+    const circle = new THREE.Mesh(circleGeometry, circleMaterial);
+
+    circle.position.set(50, 0, 0);
+    circle.rotateX(1.5);
+    scene.add(circle);
+  }
+}
+
+addCircle();
 
 // 7. Light
 const pointLight = new THREE.PointLight(0xffffff);
@@ -69,7 +108,7 @@ function addStar() {
 
   const [x, y, z] = Array(3)
     .fill()
-    .map(() => THREE.MathUtils.randFloatSpread(50));
+    .map(() => THREE.MathUtils.randFloatSpread(200));
 
   star.position.set(x, y, z);
   scene.add(star);
@@ -77,12 +116,12 @@ function addStar() {
 
 function addStar2() {
   const geometry = new THREE.SphereGeometry(0.15, 24, 24);
-  const material = new THREE.MeshStandardMaterial({ color: 0xf8d7c9 });
+  const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
   const star = new THREE.Mesh(geometry, material);
 
   const [x, y, z] = Array(3)
     .fill()
-    .map(() => THREE.MathUtils.randFloatSpread(100));
+    .map(() => THREE.MathUtils.randFloatSpread(300));
 
   star.position.set(x, y, z);
   scene.add(star);
@@ -109,44 +148,141 @@ scene.background = new THREE.Color(0x000000);
 
 // scene.add(jeff);
 
-// Moon 동그란 행성 추가하기
-const moonTexture = new THREE.TextureLoader().load("moon.jpg");
+// 지구 동그란 행성 추가하기
+const earthTexture = new THREE.TextureLoader().load("earth.jpg");
 //
-const normarlTexture = new THREE.TextureLoader().load("normal.jpg");
+// const normarlTexture = new THREE.TextureLoader().load("normal.jpg");
 
-const moon = new THREE.Mesh(
-  new THREE.SphereGeometry(4, 32, 32),
+const earth = new THREE.Mesh(
+  new THREE.SphereGeometry(2, 32, 32),
   new THREE.MeshBasicMaterial({
-    map: moonTexture,
-    normalMap: normarlTexture,
+    map: earthTexture,
+    // normalMap: normarlTexture,
     position: { x: 1000, y: 1000, z: 0 },
   })
 );
 
-scene.add(moon);
+scene.add(earth);
 
-// Mars 동그란 행성 추가하기
-const marsTexture = new THREE.TextureLoader().load("moon.jpg");
+// 화성 동그란 행성 추가하기
+const marsTexture = new THREE.TextureLoader().load("mars.jpg");
 
-const marsNormalTexture = new THREE.TextureLoader().load("normal.jpg");
+// const marsNormalTexture = new THREE.TextureLoader().load("normal.jpg");
 
-function addMars() {
-  const mars = new THREE.Mesh(
-    new THREE.SphereGeometry(2, 32, 32),
-    new THREE.MeshBasicMaterial({
-      map: marsTexture,
-      normalMap: marsNormalTexture,
-      position: { x: 1000, y: 1000, z: 0 },
-    })
-  );
-  mars.position.set(25, -5, 0);
+const mars = new THREE.Mesh(
+  new THREE.SphereGeometry(1.0, 32, 32),
+  new THREE.MeshBasicMaterial({
+    map: marsTexture,
+    // normalMap: marsNormalTexture,
+    position: { x: 1000, y: 1000, z: 0 },
+  })
+);
+mars.position.set(8, 0, 0);
 
-  scene.add(mars);
-}
+scene.add(mars);
+// 금성
+const goldstarTexture = new THREE.TextureLoader().load("goldstar.jpg");
 
-addMars();
+const goldstar = new THREE.Mesh(
+  new THREE.SphereGeometry(1.8, 32, 32),
+  new THREE.MeshBasicMaterial({
+    map: goldstarTexture,
+    // normalMap: septuneNormalTexture,
+    position: { x: 1000, y: 1000, z: 0 },
+  })
+);
+goldstar.position.set(-8, 0, 0);
 
-// scene.add(mars);
+scene.add(goldstar);
+// 수성
+const waterstarTexture = new THREE.TextureLoader().load("waterstar.jpg");
+
+const waterstar = new THREE.Mesh(
+  new THREE.SphereGeometry(0.8, 32, 32),
+  new THREE.MeshBasicMaterial({
+    map: waterstarTexture,
+    // normalMap: septuneNormalTexture,
+    position: { x: 1000, y: 1000, z: 0 },
+  })
+);
+waterstar.position.set(-16, 0, 0);
+
+scene.add(waterstar);
+
+// 태양
+const sunTexture = new THREE.TextureLoader().load("sun.jpg");
+
+const sun = new THREE.Mesh(
+  new THREE.SphereGeometry(40, 32, 32),
+  new THREE.MeshBasicMaterial({
+    map: sunTexture,
+    // normalMap: septuneNormalTexture,
+    position: { x: 1000, y: 1000, z: 0 },
+  })
+);
+sun.position.set(-70, 0, 0);
+
+scene.add(sun);
+
+// 목성
+const woodTexture = new THREE.TextureLoader().load("wood.jpg");
+
+const wood = new THREE.Mesh(
+  new THREE.SphereGeometry(5.0, 32, 32),
+  new THREE.MeshBasicMaterial({
+    map: woodTexture,
+    // normalMap: septuneNormalTexture,
+    position: { x: 1000, y: 1000, z: 0 },
+  })
+);
+wood.position.set(20, 0, 0);
+
+scene.add(wood);
+
+// 토성
+const sandTexture = new THREE.TextureLoader().load("sand.jpg");
+
+const sand = new THREE.Mesh(
+  new THREE.SphereGeometry(8.8, 32, 32),
+  new THREE.MeshBasicMaterial({
+    map: sandTexture,
+    // normalMap: septuneNormalTexture,
+    position: { x: 1000, y: 1000, z: 0 },
+  })
+);
+sand.position.set(50, 0, 0);
+
+scene.add(sand);
+
+//천왕성
+const thunderTexture = new THREE.TextureLoader().load("thunder.jpg");
+
+const thunder = new THREE.Mesh(
+  new THREE.SphereGeometry(6, 32, 32),
+  new THREE.MeshBasicMaterial({
+    map: thunderTexture,
+    // normalMap: septuneNormalTexture,
+    position: { x: 1000, y: 1000, z: 0 },
+  })
+);
+thunder.position.set(80, 0, 0);
+
+scene.add(thunder);
+
+//해왕성
+const kingstarTexture = new THREE.TextureLoader().load("kingstar.jpg");
+
+const kingstar = new THREE.Mesh(
+  new THREE.SphereGeometry(5.8, 32, 32),
+  new THREE.MeshBasicMaterial({
+    map: kingstarTexture,
+    // normalMap: septuneNormalTexture,
+    position: { x: 1000, y: 1000, z: 0 },
+  })
+);
+kingstar.position.set(100, 0, 0);
+
+scene.add(kingstar);
 
 // position 추가하기
 
@@ -156,19 +292,62 @@ function animate() {
   requestAnimationFrame(animate);
 
   // torus rotate
-  torus.rotation.x += 0.01;
-  torus.rotation.y += 0.005;
-  torus.rotation.z += 0.01;
+  // torus.rotation.x += 0.01;
+  // torus.rotation.y += 0.005;
+  // torus.rotation.z += 0.01;
 
   // circle rotate
-  circle.rotation.x += 0.02;
-  circle.rotation.y += 0.004;
-  circle.rotation.z += 0.02;
+  // circle.rotation.x += 0.001;
+  // circle.rotation.y += 0.0005;
+  // circle.rotation.z += 0.001;
 
-  // moon rotate
-  moon.rotation.x += 0.005;
-  moon.rotation.y += 0.002;
-  moon.rotation.z += 0.015;
+  // earth rotate
+  // earth.rotation.x = 500 * Math.sin(Date.now() / 1000);
+  // earth.rotation.y = 365 * Date.now() * 0.0001;
+  // earth.rotation.z = 500 * Math.cos(Date.now() / 1000);
+  earth.rotation.x += 0.001;
+  earth.rotation.y += 0.001;
+  earth.rotation.z += 0.005;
+
+  // mars rotate
+  mars.rotation.x -= 0.001;
+  mars.rotation.y -= 0.001;
+  mars.rotation.z -= 0.005;
+
+  // goldstar rotate
+  goldstar.rotation.x += 0.001;
+  goldstar.rotation.y += 0.001;
+  goldstar.rotation.z += 0.005;
+
+  // waterstar rotate
+  waterstar.rotation.x += 0.001;
+  waterstar.rotation.y += 0.001;
+  waterstar.rotation.z += 0.005;
+
+  // sun rotate
+  sun.rotation.x += 0.0005;
+  sun.rotation.y += 0.0005;
+  sun.rotation.z += 0.0003;
+
+  // wood rotate
+  wood.rotation.x += 0.0001;
+  wood.rotation.y += 0.0;
+  wood.rotation.z += 0.0005;
+
+  // sand rotate
+  sand.rotation.x -= 0.0001;
+  sand.rotation.y -= 0.0001;
+  sand.rotation.z -= 0.0005;
+
+  // thunder rotate
+  thunder.rotation.x += 0.001;
+  thunder.rotation.y += 0.001;
+  thunder.rotation.z += 0.005;
+
+  // kingstar rotate
+  kingstar.rotation.x += 0.001;
+  kingstar.rotation.y += 0.001;
+  kingstar.rotation.z += 0.005;
 
   // 컨트롤 기능 업데이트
   controls.update();
