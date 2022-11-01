@@ -92,6 +92,16 @@ const ambientLight = new THREE.AmbientLight(0xffffff);
 // 전체적으로 빛을 첨가
 scene.add(pointLight, ambientLight);
 
+// 빛 추가
+// let positionLight;
+// function addPositionLight() {
+//   positionLight = new THREE.AmbientLight(0xffffff, 50.5);
+//   positionLight.position.set(20, 0, 0);
+//   scene.add(positionLight);
+// }
+
+// addPositionLight();
+
 // 그리드 라인 첨가
 // const lightHelper = new THREE.PointLightHelper(pointLight);
 // const gridHelper = new THREE.GridHelper(200, 50);
@@ -269,6 +279,17 @@ thunder.position.set(80, 0, 0);
 
 scene.add(thunder);
 
+// 천왕성 고리
+const circleGeometry = new THREE.TorusGeometry(7, 0.05, 14, 100);
+const circleMaterial = new THREE.MeshStandardMaterial({
+  color: 0xded4b7,
+});
+const thunderCircle = new THREE.Mesh(circleGeometry, circleMaterial);
+
+thunderCircle.position.set(80, 0, 0);
+thunderCircle.rotateX(0.8);
+scene.add(thunderCircle);
+
 //해왕성
 const kingstarTexture = new THREE.TextureLoader().load("kingstar.jpg");
 
@@ -340,14 +361,14 @@ function animate() {
   sand.rotation.z -= 0.0005;
 
   // thunder rotate
-  thunder.rotation.x += 0.001;
-  thunder.rotation.y += 0.001;
-  thunder.rotation.z += 0.005;
+  thunder.rotation.x += 0.0001;
+  thunder.rotation.y += 0.0001;
+  thunder.rotation.z += 0.0005;
 
   // kingstar rotate
-  kingstar.rotation.x += 0.001;
-  kingstar.rotation.y += 0.001;
-  kingstar.rotation.z += 0.005;
+  kingstar.rotation.x -= 0.0001;
+  kingstar.rotation.y -= 0.0001;
+  kingstar.rotation.z -= 0.0005;
 
   // 컨트롤 기능 업데이트
   controls.update();
